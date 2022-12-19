@@ -71,6 +71,7 @@ filtered_commit_objects = commit_objects[:2]
 
 for commit in filtered_commit_objects:
     # print("-----")
+    message = commit.message.replace("\n", ";")
     # print(commit.message)
 
     # print(commit.diff)
@@ -85,7 +86,7 @@ for commit in filtered_commit_objects:
     # generate CSV row
     for item in items:
         if item == items[0]:
-            print(f"{commit.sha},{commit.message},{item}")
+            print(f"{commit.sha},{message},{item}")
         else:
             print(f",,{item}")
 
