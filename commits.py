@@ -1,6 +1,8 @@
 from collections import namedtuple
 import os
 import shutil
+import csv
+import sys
 import git
 import pygit2
 from langchain.llms import OpenAI
@@ -67,17 +69,25 @@ prompt = CustomPromptTemplate(
 llm = OpenAI(temperature=0.2, openai_api_key=OPENAI_KEY,
              max_tokens=100, model_name="text-davinci-003")
 
-filtered_commit_objects = commit_objects[:2]
+filtered_commit_objects = commit_objects[:5]
+
+writer = csv.writer(sys.stdout, quoting=csv.QUOTE_MINIMAL)
 
 for commit in filtered_commit_objects:
-    # print("-----")
     message = commit.message.replace("\n", ";")
-    # print(commit.message)
+
+    # Skip merge commits
+    if message.startswith("Merge"):
+        continue
 
     # print(commit.diff)
     # print(prompt.format(diff=commit.diff))
 
-    response = llm(prompt.format(diff=commit.diff))
+    # text-davinci-003 supports 4000 tokens. Let's use upto 3500 tokens for the prompt.
+    # 3500 tokens = 14,000 characters (https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them)
+    # We're using the first 14000 characters of the diff
+    response = llm(prompt.format(diff=commit.diff[:14000]))
+
     # Convert the markdown string to HTML
     html = markdown.markdown(response)
     # Use a regular expression to extract the list items from the HTML
@@ -86,8 +96,8 @@ for commit in filtered_commit_objects:
     # generate CSV row
     for item in items:
         if item == items[0]:
-            print(f"{commit.sha},{message},{item}")
+            writer.writerow([commit.sha, message, item])
         else:
-            print(f",,{item}")
+            writer.writerow(['', '', item])
 
     # print("-----")
