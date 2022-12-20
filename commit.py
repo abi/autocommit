@@ -1,3 +1,5 @@
+from __future__ import print_function, unicode_literals
+from PyInquirer import prompt as py_inquirer_prompt
 import subprocess
 import pygit2
 
@@ -20,5 +22,23 @@ if len(output.stderr) > 0:
     exit(-1)
 
 diff = output.stdout.decode("utf8")
-# print(diff)
-print("\n".join(generate_suggestions(diff)))
+suggestions = generate_suggestions(diff)
+
+# TODO: Add some custom styles
+questions = [
+    {
+        'type': 'list',
+        'name': 'commit_message',
+        'message': 'Here are some commit suggestions. Pick one.',
+        'choices': suggestions,
+    }
+]
+answers = py_inquirer_prompt(questions)
+answers = py_inquirer_prompt([{
+    'type': 'input',
+    'name': 'final_commit_message',
+    'message': 'Edit or confirm the commit message:',
+    'default': answers.get('commit_message')
+}, ])
+
+print("Committing with message: ", answers.get('final_commit_message'))
