@@ -2,10 +2,32 @@ from __future__ import print_function, unicode_literals
 from PyInquirer import prompt as py_inquirer_prompt, style_from_dict, Token
 import subprocess
 
+import keyring
 from llm import generate_suggestions
+
+SERVICE_ID = "auto-commit-cli"
+
+
+def prompt_for_openai_api_key():
+    questions = [
+        {
+            'type': 'input',
+            'name': 'openai_api_key',
+            'message': 'Please enter your OpenAI API key:',
+        }
+    ]
+    answers = py_inquirer_prompt(questions)
+    openai_api_key = answers['openai_api_key']
+    keyring.set_password(SERVICE_ID, 'user', openai_api_key)
+    return openai_api_key
 
 
 def main():
+    # Prompt for OpenAI API key if it's not set
+    openai_api_key = keyring.get_password(SERVICE_ID, 'user')
+    if openai_api_key is None:
+        openai_api_key = prompt_for_openai_api_key()
+
     #  Get the diff including untracked files (see https://stackoverflow.com/a/52093887)
     git_command = "git --no-pager diff; for next in $( git ls-files --others --exclude-standard ) ; do git --no-pager diff --no-index /dev/null $next; done;"
     output = subprocess.run(git_command, shell=True,
@@ -28,7 +50,19 @@ def main():
         print("Diff is empty. Nothing to commit.")
         exit(0)
 
-    suggestions = generate_suggestions(diff)
+    suggestions = []
+
+    try:
+        suggestions = generate_suggestions(diff, openai_api_key=openai_api_key)
+    except Exception as e:
+        print("There was an error generating suggestions from OpenAI: ")
+        # Prompt for OpenAI API key if it's incorrect
+        if "Incorrect API key provided" in str(e):
+            openai_api_key = prompt_for_openai_api_key()
+            print("Please re-run the command now.")
+        else:
+            print(e)
+        exit(-1)
 
     if len(suggestions) == 0:
         print("No suggestions found.")
