@@ -25,7 +25,6 @@ diff = output.stdout.decode("utf8")
 
 # trim the diff
 diff = diff.strip()
-print(len(diff))
 
 if len(diff) == 0:
     print("Diff is empty. Nothing to commit.")
