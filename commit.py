@@ -85,6 +85,7 @@ def main():
             'name': 'commit_message',
             'message': 'Commit message suggestions:',
             'choices': [f"{i + 1}. {item}" for i, item in enumerate(suggestions)],
+            'filter': lambda val: val[3:]
         }
     ]
     answers = py_inquirer_prompt(questions, style=custom_style)
