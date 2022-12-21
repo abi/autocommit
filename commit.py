@@ -57,4 +57,17 @@ print("Committing with message: ", answers.get('final_commit_message'))
 
 repo = pygit2.Repository(".")
 
-# git commit -am "Commit message"
+# git add -A
+# git commit -m "Commit message"
+git_command = "git add -A; git commit -m \"" + \
+    answers.get('final_commit_message') + "\""
+print(git_command)
+output = subprocess.run(git_command, shell=True,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+if len(output.stderr) > 0:
+    error = output.stderr.decode("utf-8")
+    print("There was an error running the command: ")
+    print(error)
+else:
+    print("Commit successful.")
