@@ -8,7 +8,7 @@ import pygit2
 
 from llm import generate_suggestions
 
-github_repo_url = 'https://github.com/abi/codeGPT.git'
+GITHUB_REPO_URL = 'https://github.com/abi/codeGPT.git'
 temp_repo_dir = '/tmp/ai-commit-msg-repo'
 
 # Delete the directory if it exists
@@ -16,7 +16,7 @@ if os.path.exists(temp_repo_dir):
     shutil.rmtree(temp_repo_dir)
 
 # Clone the repository
-git.Repo.clone_from(github_repo_url, temp_repo_dir)
+git.Repo.clone_from(GITHUB_REPO_URL, temp_repo_dir)
 
 # Open the repository
 repo = pygit2.Repository(temp_repo_dir)
