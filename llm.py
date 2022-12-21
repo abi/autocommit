@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# TODO: Revoke key
 OPENAI_KEY = os.getenv("OPENAI_KEY")
 
 
