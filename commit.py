@@ -1,7 +1,6 @@
 from __future__ import print_function, unicode_literals
 from PyInquirer import prompt as py_inquirer_prompt
 import subprocess
-import pygit2
 
 from llm import generate_suggestions
 
@@ -20,8 +19,7 @@ if len(output.stderr) > 0:
     exit(-1)
 
 diff = output.stdout.decode("utf8")
-
-# trim the diff
+# Trim the diff
 diff = diff.strip()
 
 if len(diff) == 0:
@@ -34,6 +32,7 @@ if len(suggestions) == 0:
     print("No suggestions found.")
     exit(0)
 
+# Prompt user with commit messages and choices and allow edits
 # TODO: Add some custom styles
 questions = [
     {
@@ -53,15 +52,9 @@ answers = py_inquirer_prompt([{
 
 print("Committing with message: ", answers.get('final_commit_message'))
 
-# TODO: Move to the root of the repo
-
-repo = pygit2.Repository(".")
-
-# git add -A
-# git commit -m "Commit message"
+# Commit the changes
 git_command = "git add -A; git commit -m \"" + \
     answers.get('final_commit_message') + "\""
-print(git_command)
 output = subprocess.run(git_command, shell=True,
                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
