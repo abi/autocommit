@@ -32,7 +32,7 @@ for commit in commits:
         diff = ""
     commit_objects.append(CommitObject(commit.id, commit.message, diff))
 
-filtered_commit_objects = commit_objects[:2]
+filtered_commit_objects = commit_objects
 
 writer = csv.writer(sys.stdout, quoting=csv.QUOTE_MINIMAL)
 
