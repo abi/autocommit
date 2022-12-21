@@ -5,8 +5,6 @@ import pygit2
 
 from llm import generate_suggestions
 
-# repo = pygit2.Repository(".")
-
 #  Get the diff including untracked files (see https://stackoverflow.com/a/52093887)
 git_command = "git --no-pager diff; for next in $( git ls-files --others --exclude-standard ) ; do git --no-pager diff --no-index /dev/null $next; done;"
 output = subprocess.run(git_command, shell=True,
@@ -49,8 +47,14 @@ answers = py_inquirer_prompt(questions)
 answers = py_inquirer_prompt([{
     'type': 'input',
     'name': 'final_commit_message',
-    'message': 'Edit or confirm the commit message:',
+    'message': 'Confirm or edit the commit message:',
     'default': answers.get('commit_message')
 }, ])
 
 print("Committing with message: ", answers.get('final_commit_message'))
+
+# TODO: Move to the root of the repo
+
+repo = pygit2.Repository(".")
+
+# git commit -am "Commit message"
