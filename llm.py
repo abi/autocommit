@@ -37,7 +37,7 @@ prompt = CustomPromptTemplate(
 def generate_suggestions(diff, openai_api_key=OPENAI_KEY):
 
     llm = OpenAI(temperature=0.2, openai_api_key=openai_api_key,
-                 max_tokens=100, model_name="text-davinci-003")
+                 max_tokens=100, model_name="text-davinci-003")  # type: ignore
 
     # query OpenAI
     formattedPrompt = prompt.format(diff=diff)
