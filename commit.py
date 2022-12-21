@@ -22,10 +22,19 @@ if len(output.stderr) > 0:
     exit(-1)
 
 diff = output.stdout.decode("utf8")
+
+# trim the diff
+diff = diff.strip()
+print(len(diff))
+
+if len(diff) == 0:
+    print("Diff is empty. Nothing to commit.")
+    exit(0)
+
 suggestions = generate_suggestions(diff)
 
 if len(suggestions) == 0:
-    print("No suggestions found. This is probably because the diff is empty.")
+    print("No suggestions found.")
     exit(0)
 
 # TODO: Add some custom styles
