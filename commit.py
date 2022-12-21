@@ -24,6 +24,10 @@ if len(output.stderr) > 0:
 diff = output.stdout.decode("utf8")
 suggestions = generate_suggestions(diff)
 
+if len(suggestions) == 0:
+    print("No suggestions found. This is probably because the diff is empty.")
+    exit(0)
+
 # TODO: Add some custom styles
 questions = [
     {
