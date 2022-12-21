@@ -3,12 +3,18 @@ import os
 import shutil
 import csv
 import sys
+from dotenv import load_dotenv
 import git
 import pygit2
 
 from llm import generate_suggestions
 
-GITHUB_REPO_URL = 'https://github.com/abi/codeGPT.git'
+load_dotenv()
+
+GIT_REPO_URL = os.getenv("GIT_REPO_URL")
+if GIT_REPO_URL is None:
+    raise ValueError("GIT_REPO_URL is not set")
+
 temp_repo_dir = '/tmp/ai-commit-msg-repo'
 
 # Delete the directory if it exists
@@ -16,7 +22,7 @@ if os.path.exists(temp_repo_dir):
     shutil.rmtree(temp_repo_dir)
 
 # Clone the repository
-git.Repo.clone_from(GITHUB_REPO_URL, temp_repo_dir)
+git.Repo.clone_from(GIT_REPO_URL, temp_repo_dir)
 
 # Open the repository
 repo = pygit2.Repository(temp_repo_dir)
