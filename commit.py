@@ -11,7 +11,7 @@ output = subprocess.run(git_command, shell=True,
 
 if len(output.stderr) > 0:
     error = output.stderr.decode("utf-8")
-    print("There was an error running the command: ")
+    print("There was an error retrieving the current diff: ")
     if error.startswith("warning: Not a git repository"):
         print("You're not inside a git repo. Please run it from inside a git repo.")
     else:
@@ -50,8 +50,6 @@ answers = py_inquirer_prompt([{
     'default': answers.get('commit_message')
 }, ])
 
-print("Committing with message: ", answers.get('final_commit_message'))
-
 # Commit the changes
 git_command = "git add -A; git commit -m \"" + \
     answers.get('final_commit_message') + "\""
@@ -60,7 +58,8 @@ output = subprocess.run(git_command, shell=True,
 
 if len(output.stderr) > 0:
     error = output.stderr.decode("utf-8")
-    print("There was an error running the command: ")
+    print("There was an error committing: ")
     print(error)
 else:
-    print("Commit successful.")
+    print("Commit successful with message: ",
+          answers.get('final_commit_message'))
