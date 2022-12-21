@@ -50,7 +50,7 @@ def main():
             'type': 'list',
             'name': 'commit_message',
             'message': 'Commit message suggestions:',
-            'choices': suggestions,
+            'choices': [f"{i + 1}. {item}" for i, item in enumerate(suggestions)],
         }
     ]
     answers = py_inquirer_prompt(questions, style=custom_style)
