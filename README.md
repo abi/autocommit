@@ -4,6 +4,8 @@ AI-Generated Git Commit Messages
 
 Includes two tools: `commit.py` and `scan_repo.py`
 
+Install the `aicommit` with `pip install aicommit`
+
 ## commit
 
 An interactive CLI tool that generates 5 commit message suggestions for all the changes in your current Git repo. After you pick and edit the commit message you want, it performs the commit.
@@ -23,6 +25,8 @@ To run scan_repo, copy `.env.example` to `.env` and add your OPENAI_KEY.
 To update the repo it runs on, modify the `GITHUB_REPO_URL` variable at the top of `scan_repo.py`
 
 # Publishing to pip
+
+Version bump and clear out `dist/`
 
 ```
 python3 -m build

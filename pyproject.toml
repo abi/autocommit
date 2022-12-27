@@ -1,6 +1,6 @@
 [project]
 name = "aicommit"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Abi Raja", email="abimanyuraja@gmail.com" },
 ]
@@ -62,7 +62,7 @@ dependencies = [
 "Bug Tracker" = "https://github.com/abi/autocommit/issues"
 
 [project.scripts]
-autocommit = "autocommit.commit:main"
+aicommit = "autocommit.commit:main"
 
 [build-system]
 requires = ["hatchling"]
