@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import git
 import pygit2
 
-from llm import generate_suggestions
+from autocommit.llm import generate_suggestions
 
 load_dotenv()
 
@@ -15,7 +15,7 @@ GIT_REPO_URL = os.getenv("GIT_REPO_URL")
 if GIT_REPO_URL is None:
     raise ValueError("GIT_REPO_URL is not set")
 
-temp_repo_dir = '/tmp/ai-commit-msg-repo'
+temp_repo_dir = "/tmp/ai-commit-msg-repo"
 
 # Delete the directory if it exists
 if os.path.exists(temp_repo_dir):
@@ -30,7 +30,7 @@ commits = repo.walk(repo.head.target, pygit2.GIT_SORT_TIME)
 
 # Iterate over the commits and organize the data we need
 commit_objects = []
-CommitObject = namedtuple('CommitObject', ['sha', 'message', 'diff'])
+CommitObject = namedtuple("CommitObject", ["sha", "message", "diff"])
 for commit in commits:
     if len(commit.parents) > 0:
         diff = repo.diff(commit.parents[0], commit).patch
@@ -60,4 +60,4 @@ for commit in filtered_commit_objects:
         if item == suggestions[0]:
             writer.writerow([commit.sha, message, item])
         else:
-            writer.writerow(['', '', item])
+            writer.writerow(["", "", item])
