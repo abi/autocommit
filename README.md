@@ -4,7 +4,7 @@ AI-Generated Git Commit Messages
 
 Includes two tools: `commit.py` and `scan_repo.py`
 
-Install the `aicommit` with `pip install aicommit`
+Install the `aicommit` command with `pip install aicommit`
 
 ## commit
 
