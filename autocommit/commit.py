@@ -88,6 +88,11 @@ def main():
 
     #  Get the diff including untracked files (see https://stackoverflow.com/a/52093887)
     git_command = "git --no-pager diff; for next in $( git ls-files --others --exclude-standard ) ; do git --no-pager diff --no-index /dev/null $next; done;"
+    
+    # Windows support
+    if os.name == 'nt':
+        git_command = """git diff && for /f "delims=" %a in ('git ls-files --others --exclude-standard') do (git diff --no-index /dev/null %a)"""
+    
     output = subprocess.run(
         git_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
@@ -165,6 +170,13 @@ def main():
     git_command = (
         'git add -A; git commit -m "' + answers.get("final_commit_message") + '"'
     )
+
+    # Windows support
+    if os.name == "nt":
+        git_command = (
+        'git add -A && git commit -m "' + answers.get("final_commit_message") + '"'
+        )
+        
     output = subprocess.run(
         git_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
