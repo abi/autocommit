@@ -24,6 +24,10 @@ To run scan_repo, copy `.env.example` to `.env` and add your OPENAI_KEY.
 
 To update the repo it runs on, modify the `GITHUB_REPO_URL` variable at the top of `scan_repo.py`
 
+# Feedback/thoughts
+
+Ping me on [Twitter](https://twitter.com/_abi_)
+
 # Publishing to pip
 
 Version bump and clear out `dist/`
