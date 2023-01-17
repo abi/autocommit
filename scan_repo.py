@@ -52,7 +52,7 @@ for commit in filtered_commit_objects:
     # text-davinci-003 supports 4000 tokens. Let's use upto 3500 tokens for the prompt.
     # 3500 tokens = 14,000 characters (https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them)
     # But in practice, > 7000 seems to exceed the limit
-    suggestions = generate_suggestions(commit.diff[:7000])
+    suggestions = generate_suggestions(commit.diff[:7000], GIT_REPO_URL)
 
     # generate CSV row
     for item in suggestions:
