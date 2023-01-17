@@ -21,8 +21,8 @@ class CustomPromptTemplate(BasePromptTemplate, BaseModel):
 
 
 prompt = CustomPromptTemplate(
-    input_variables=["diff"], template="""
-    What follows "-------" is a git diff for a potential commit.
+    input_variables=["diff", "repo_url"], template="""
+    What follows "-------" is a git diff for a potential commit on the repository located at {repo_url}.
     Reply with a markdown unordered list of 5 possible, different Git commit messages 
     (a Git commit message should be concise but also try to describe 
     the important changes in the commit), order the list by what you think 
@@ -34,13 +34,13 @@ prompt = CustomPromptTemplate(
 """)
 
 
-def generate_suggestions(diff, openai_api_key=OPENAI_KEY):
+def generate_suggestions(diff, repo_url, openai_api_key=OPENAI_KEY):
 
     llm = OpenAI(temperature=0.2, openai_api_key=openai_api_key,
                  max_tokens=100, model_name="text-davinci-003")  # type: ignore
 
     # query OpenAI
-    formattedPrompt = prompt.format(diff=diff)
+    formattedPrompt = prompt.format(diff=diff, repo_url=repo_url)
     response = llm(formattedPrompt)
 
     # Convert the markdown string to HTML
